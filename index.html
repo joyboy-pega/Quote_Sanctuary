@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Sanctuary — Your Thoughts Deserve a Universe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --aurora-1: rgba(138, 43, 226, 0.15);
+            --aurora-2: rgba(0, 191, 255, 0.15);
+            --aurora-3: rgba(255, 20, 147, 0.15);
+            --neon-purple: #b794f6;
+            --neon-blue: #60a5fa;
+            --neon-pink: #f472b6;
+            --neon-gold: #fbbf24;
+            --glass-bg: rgba(17, 24, 39, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: #0a0e1a;
+            color: #e5e7eb;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Aurora Background */
+        .aurora-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .aurora {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, var(--aurora-1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 20%, var(--aurora-2) 0%, transparent 50%),
+                        radial-gradient(ellipse at 20% 80%, var(--aurora-3) 0%, transparent 50%);
+            animation: aurora-shift 20s ease-in-out infinite;
+            filter: blur(60px);
+        }
+
+        @keyframes aurora-shift {
+            0%, 100% { transform: translate(-25%, -25%) rotate(0deg); }
+            33% { transform: translate(-30%, -20%) rotate(120deg); }
+            66% { transform: translate(-20%, -30%) rotate(240deg); }
+        }
+
+        /* Particle System */
+        .particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float-particle linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(var(--drift));
+                opacity: 0;
+            }
+        }
+
+        /* Glass Morphism */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Typography */
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, var(--neon-purple) 50%, var(--neon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 80px rgba(183, 148, 246, 0.5);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .quote-display {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.25rem, 3vw, 2rem);
+            line-height: 1.6;
+            letter-spacing: 0.01em;
+        }
+
+        /* Neon Effects */
+        .neon-glow {
+            box-shadow: 0 0 20px currentColor,
+                        0 0 40px currentColor,
+                        0 0 60px currentColor;
+        }
+
+        .neon-text {
+            text-shadow: 0 0 10px currentColor,
+                        0 0 20px currentColor,
+                        0 0 30px currentColor;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            padding: 1rem 2rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(183, 148, 246, 0.4);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        /* Theme Specific */
+        .theme-neon {
+            border-color: var(--neon-purple) !important;
+            box-shadow: 0 0 30px rgba(183, 148, 246, 0.3);
+        }
+
+        .theme-gold {
+            border-color: var(--neon-gold) !important;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+        }
+
+        .theme-minimal {
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            box-shadow: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(17, 24, 39, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--neon-purple), var(--neon-blue));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--neon-blue), var(--neon-purple));
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Masonry Grid */
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem 0;
+        }
+
+        /* Input Styling */
+        input, textarea, select {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            color: #e5e7eb;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 20px rgba(183, 148, 246, 0.3);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        /* Tag Pills */
+        .tag-pill {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tag-pill:hover {
+            transform: scale(1.05);
+        }
+
+        /* Wallpaper Preview */
+        .wallpaper-preview {
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* Fade transitions */
+        .fade-enter {
+            opacity: 0;
+        }
+
+        .fade-enter-active {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .fade-exit {
+            opacity: 1;
+        }
+
+        .fade-exit-active {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Nav Blur */
+        .nav-blur {
+            background: rgba(10, 14, 26, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .masonry-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Hide scrollbar for quote container in wallpaper */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Aurora Background -->
+    <div class="aurora-container">
+        <div class="aurora"></div>
+    </div>
+
+    <!-- Particle Container -->
+    <div class="particle-container" id="particleContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 nav-blur">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                    <span class="text-white text-xl">✨</span>
+                </div>
+                <span class="font-['Orbitron'] font-bold text-xl">Sanctuary</span>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="showSection('hero')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition font-['Orbitron'] text-sm">Home</button>
+                <button onclick="showSection('create')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition font-['Orbitron'] text-sm">Create</button>
+                <button onclick="showSection('gallery')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition font-['Orbitron'] text-sm">Gallery</button>
+                <button onclick="toggleSettings()" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">⚙️</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="relative z-10" style="margin-top: 80px;">
+        
+        <!-- Hero Section -->
+        <section id="heroSection" class="hero-section">
+            <div class="text-center px-6 max-w-5xl mx-auto">
+                <h1 class="hero-title mb-8 animate-in" style="animation-delay: 0.1s;">
+                    Your Thoughts<br/>Deserve a Universe
+                </h1>
+                <p class="text-xl md:text-2xl mb-12 text-gray-300 animate-in font-light" style="animation-delay: 0.3s;">
+                    A sanctuary for your words. Create, preserve, and share the wisdom that moves you.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-in" style="animation-delay: 0.5s;">
+                    <button onclick="showSection('create')" class="btn-primary">
+                        Begin Your Journey
+                    </button>
+                    <button onclick="showSection('gallery')" class="px-8 py-4 rounded-xl glass-card font-['Orbitron'] hover:scale-105 transition">
+                        Explore Quotes
+                    </button>
+                </div>
+                
+                <!-- Quote of the Day -->
+                <div class="mt-20 glass p-8 max-w-2xl mx-auto animate-in" style="animation-delay: 0.7s;">
+                    <p class="text-sm font-['Orbitron'] text-purple-400 mb-4">✨ QUOTE OF THE DAY</p>
+                    <p id="qotd-text" class="quote-display mb-4 italic">"Your first quote awaits..."</p>
+                    <p id="qotd-author" class="text-sm text-gray-400">— Start creating</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Create Section -->
+        <section id="createSection" class="hidden min-h-screen py-20 px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-['Orbitron'] font-bold mb-4 text-center">Craft Your Quote</h2>
+                <p class="text-center text-gray-400 mb-12">Let your thoughts take form</p>
+
+                <div class="glass p-8 md:p-12 mb-8">
+                    <!-- Quote Input -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-['Orbitron'] text-purple-400 mb-2">Your Quote</label>
+                        <textarea 
+                            id="quoteText" 
+                            class="w-full" 
+                            placeholder="Write something profound..."
+                            oninput="updatePreview()"
+                        ></textarea>
+                        <div class="flex justify-between items-center mt-2">
+                            <span id="charCount" class="text-xs text-gray-500">0 characters</span>
+                            <button onclick="startVoiceInput()" class="text-xs text-purple-400 hover:text-purple-300 transition">🎤 Voice Input</button>
+                        </div>
+                    </div>
+
+                    <!-- Author Input -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-['Orbitron'] text-purple-400 mb-2">Author (Optional)</label>
+                        <input 
+                            type="text" 
+                            id="quoteAuthor" 
+                            placeholder="Your name or 'Anonymous'"
+                            oninput="updatePreview()"
+                        />
+                    </div>
+
+                    <!-- Theme Selector -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-['Orbitron'] text-purple-400 mb-3">Visual Theme</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <button onclick="selectTheme('neon')" class="theme-btn p-4 rounded-lg border-2 border-purple-500 bg-purple-500/20 hover:bg-purple-500/30 transition" data-theme="neon">
+                                <div class="text-2xl mb-2">⚡</div>
+                                <div class="text-xs font-['Orbitron']">Neon</div>
+                            </button>
+                            <button onclick="selectTheme('gold')" class="theme-btn p-4 rounded-lg border-2 border-gray-600 bg-gray-800/50 hover:bg-gray-700/50 transition" data-theme="gold">
+                                <div class="text-2xl mb-2">✨</div>
+                                <div class="text-xs font-['Orbitron']">Gold</div>
+                            </button>
+                            <button onclick="selectTheme('minimal')" class="theme-btn p-4 rounded-lg border-2 border-gray-600 bg-gray-800/50 hover:bg-gray-700/50 transition" data-theme="minimal">
+                                <div class="text-2xl mb-2">🌙</div>
+                                <div class="text-xs font-['Orbitron']">Minimal</div>
+                            </button>
+                            <button onclick="selectTheme('cosmic')" class="theme-btn p-4 rounded-lg border-2 border-gray-600 bg-gray-800/50 hover:bg-gray-700/50 transition" data-theme="cosmic">
+                                <div class="text-2xl mb-2">🌌</div>
+                                <div class="text-xs font-['Orbitron']">Cosmic</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Mood Tags -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-['Orbitron'] text-purple-400 mb-3">Mood Tags</label>
+                        <div class="flex flex-wrap gap-2">
+                            <span onclick="toggleTag('motivation')" class="tag-pill bg-blue-500/20 text-blue-300 border border-blue-500/30" data-tag="motivation">Motivation</span>
+                            <span onclick="toggleTag('peace')" class="tag-pill bg-green-500/20 text-green-300 border border-green-500/30" data-tag="peace">Peace</span>
+                            <span onclick="toggleTag('warrior')" class="tag-pill bg-red-500/20 text-red-300 border border-red-500/30" data-tag="warrior">Warrior</span>
+                            <span onclick="toggleTag('love')" class="tag-pill bg-pink-500/20 text-pink-300 border border-pink-500/30" data-tag="love">Love</span>
+                            <span onclick="toggleTag('discipline')" class="tag-pill bg-purple-500/20 text-purple-300 border border-purple-500/30" data-tag="discipline">Discipline</span>
+                            <span onclick="toggleTag('deep')" class="tag-pill bg-indigo-500/20 text-indigo-300 border border-indigo-500/30" data-tag="deep">Deep Thoughts</span>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Toggle -->
+                    <div class="mb-8">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="isPublic" class="w-5 h-5 rounded">
+                            <span class="text-sm">Make this quote public (shareable with friends)</span>
+                        </label>
+                    </div>
+
+                    <!-- Live Preview -->
+                    <div class="mb-8">
+                        <p class="text-sm font-['Orbitron'] text-purple-400 mb-3">Live Preview</p>
+                        <div id="livePreview" class="glass-card p-8 min-h-[200px] flex flex-col justify-center">
+                            <p class="quote-display mb-4 italic text-center">"Start typing to see your quote..."</p>
+                            <p class="text-sm text-gray-400 text-center">— You</p>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button onclick="saveQuote()" class="btn-primary flex-1">
+                            Save Quote
+                        </button>
+                        <button onclick="createWallpaper()" class="px-8 py-4 rounded-xl glass-card font-['Orbitron'] hover:scale-105 transition">
+                            Generate Wallpaper
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallerySection" class="hidden min-h-screen py-20 px-6">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-['Orbitron'] font-bold mb-4 text-center">Your Collection</h2>
+                <p class="text-center text-gray-400 mb-12">Every thought, preserved in time</p>
+
+                <!-- Search and Filters -->
+                <div class="glass p-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            placeholder="Search quotes..." 
+                            oninput="filterQuotes()"
+                            class="w-full"
+                        />
+                        <select id="filterMood" onchange="filterQuotes()" class="w-full">
+                            <option value="">All Moods</option>
+                            <option value="motivation">Motivation</option>
+                            <option value="peace">Peace</option>
+                            <option value="warrior">Warrior</option>
+                            <option value="love">Love</option>
+                            <option value="discipline">Discipline</option>
+                            <option value="deep">Deep Thoughts</option>
+                        </select>
+                        <select id="filterTheme" onchange="filterQuotes()" class="w-full">
+                            <option value="">All Themes</option>
+                            <option value="neon">Neon</option>
+                            <option value="gold">Gold</option>
+                            <option value="minimal">Minimal</option>
+                            <option value="cosmic">Cosmic</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-4 mt-4">
+                        <button onclick="exportQuotes()" class="text-sm text-purple-400 hover:text-purple-300 transition">📥 Export JSON</button>
+                        <button onclick="importQuotes()" class="text-sm text-purple-400 hover:text-purple-300 transition">📤 Import JSON</button>
+                        <button onclick="filterFavorites()" class="text-sm text-purple-400 hover:text-purple-300 transition">⭐ Favorites Only</button>
+                    </div>
+                </div>
+
+                <!-- Quotes Grid -->
+                <div id="quotesGrid" class="masonry-grid">
+                    <!-- Quotes will be rendered here -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="text-center py-20 hidden">
+                    <div class="text-6xl mb-4">📝</div>
+                    <p class="text-xl text-gray-400 mb-4">No quotes yet</p>
+                    <button onclick="showSection('create')" class="btn-primary">
+                        Create Your First Quote
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Wallpaper Generator Modal -->
+    <div id="wallpaperModal" class="modal">
+        <div class="glass p-8 max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-['Orbitron'] font-bold">Wallpaper Generator</h3>
+                <button onclick="closeWallpaperModal()" class="text-3xl hover:text-purple-400 transition">&times;</button>
+            </div>
+
+            <!-- Format Selector -->
+            <div class="mb-6">
+                <label class="block text-sm font-['Orbitron'] text-purple-400 mb-3">Format</label>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <button onclick="selectFormat('instagram')" class="format-btn p-4 rounded-lg border-2 border-purple-500 bg-purple-500/20" data-format="instagram">
+                        <div class="text-xs font-['Orbitron']">Instagram Story</div>
+                        <div class="text-xs text-gray-400">1080x1920</div>
+                    </button>
+                    <button onclick="selectFormat('mobile')" class="format-btn p-4 rounded-lg border-2 border-gray-600 bg-gray-800/50" data-format="mobile">
+                        <div class="text-xs font-['Orbitron']">Mobile</div>
+                        <div class="text-xs text-gray-400">1080x2340</div>
+                    </button>
+                    <button onclick="selectFormat('desktop')" class="format-btn p-4 rounded-lg border-2 border-gray-600 bg-gray-800/50" data-format="desktop">
+                        <div class="text-xs font-['Orbitron']">Desktop</div>
+                        <div class="text-xs text-gray-400">1920x1080</div>
+                    </button>
+                    <button onclick="selectFormat('square')" class="format-btn p-4 rounded-lg border-2 border-gray-600 bg-gray-800/50" data-format="square">
+                        <div class="text-xs font-['Orbitron']">Square Post</div>
+                        <div class="text-xs text-gray-400">1080x1080</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="mb-6">
+                <div id="wallpaperPreview" class="wallpaper-preview glass-card">
+                    <!-- Wallpaper will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Download Buttons -->
+            <div class="flex gap-4">
+                <button onclick="downloadWallpaper('png')" class="btn-primary flex-1">
+                    Download PNG
+                </button>
+                <button onclick="downloadWallpaper('jpg')" class="px-8 py-4 rounded-xl glass-card font-['Orbitron'] hover:scale-105 transition flex-1">
+                    Download JPG
+                </button>
+                <button onclick="shareWallpaper()" class="px-8 py-4 rounded-xl glass-card font-['Orbitron'] hover:scale-105 transition">
+                    Share
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="glass p-8 max-w-2xl w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-['Orbitron'] font-bold">Settings</h3>
+                <button onclick="toggleSettings()" class="text-3xl hover:text-purple-400 transition">&times;</button>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Particle Effects Toggle -->
+                <div>
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span>Particle Effects</span>
+                        <input type="checkbox" id="particlesToggle" checked onchange="toggleParticles()" class="w-5 h-5 rounded">
+                    </label>
+                </div>
+
+                <!-- Animation Toggle -->
+                <div>
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span>Animations</span>
+                        <input type="checkbox" id="animationsToggle" checked onchange="toggleAnimations()" class="w-5 h-5 rounded">
+                    </label>
+                </div>
+
+                <!-- Clear All Data -->
+                <div class="pt-6 border-t border-white/10">
+                    <button onclick="clearAllData()" class="w-full px-6 py-3 bg-red-500/20 text-red-300 rounded-lg border border-red-500/30 hover:bg-red-500/30 transition">
+                        Clear All Quotes
+                    </button>
+                </div>
+
+                <!-- Public Share Link -->
+                <div class="pt-6 border-t border-white/10">
+                    <label class="block text-sm font-['Orbitron'] text-purple-400 mb-2">Public Gallery Link</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="shareLink" readonly value="Not yet implemented" class="flex-1 text-sm">
+                        <button onclick="copyShareLink()" class="px-4 py-2 bg-purple-500/20 rounded-lg hover:bg-purple-500/30 transition">Copy</button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Share this link with friends to show your public quotes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="handleFileImport(event)">
+
+    <script>
+        // ============================================
+        // STATE MANAGEMENT
+        // ============================================
+        let quotes = [];
+        let currentTheme = 'neon';
+        let selectedTags = [];
+        let currentFormat = 'instagram';
+        let currentEditId = null;
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        window.onload = function() {
+            loadQuotes();
+            initializeDefaultQuotes();
+            createParticles();
+            initScrollAnimations();
+            updateQuoteOfTheDay();
+            renderQuotes();
+        };
+
+        function initializeDefaultQuotes() {
+            // Only add default quotes if user has no quotes yet
+            if (quotes.length === 0) {
+                quotes = [
+                    {
+                        id: 1,
+                        text: "The moment you doubt whether you can fly, you cease forever to be able to do it.",
+                        author: "J.M. Barrie",
+                        date: "2026-05-23",
+                        theme: "neon",
+                        tags: ["motivation", "deep"],
+                        isPublic: true,
+                        isFavorite: false
+                    },
+                    {
+                        id: 2,
+                        text: "Protect your peace, even if it means walking away from what you love.",
+                        author: "Me",
+                        date: "2026-05-23",
+                        theme: "minimal",
+                        tags: ["peace", "discipline"],
+                        isPublic: true,
+                        isFavorite: true
+                    },
+                    {
+                        id: 3,
+                        text: "The warrior within you is stronger than any battle you face.",
+                        author: "Unknown",
+                        date: "2026-05-22",
+                        theme: "gold",
+                        tags: ["warrior", "motivation"],
+                        isPublic: true,
+                        isFavorite: false
+                    },
+                    {
+                        id: 4,
+                        text: "In the silence between thoughts, you'll find your truest self.",
+                        author: "Me",
+                        date: "2026-05-21",
+                        theme: "cosmic",
+                        tags: ["peace", "deep"],
+                        isPublic: false,
+                        isFavorite: true
+                    },
+                    {
+                        id: 5,
+                        text: "Discipline is choosing between what you want now and what you want most.",
+                        author: "Abraham Lincoln",
+                        date: "2026-05-20",
+                        theme: "minimal",
+                        tags: ["discipline", "motivation"],
+                        isPublic: true,
+                        isFavorite: false
+                    },
+                    {
+                        id: 6,
+                        text: "Love is not something you find. Love is something that finds you when you're ready.",
+                        author: "Loretta Young",
+                        date: "2026-05-19",
+                        theme: "neon",
+                        tags: ["love", "deep"],
+                        isPublic: true,
+                        isFavorite: false
+                    },
+                    {
+                        id: 7,
+                        text: "Your energy introduces you before you even speak. Choose it wisely.",
+                        author: "Me",
+                        date: "2026-05-18",
+                        theme: "gold",
+                        tags: ["motivation", "peace"],
+                        isPublic: true,
+                        isFavorite: true
+                    },
+                    {
+                        id: 8,
+                        text: "The universe is not outside of you. Look inside yourself; everything that you want, you already are.",
+                        author: "Rumi",
+                        date: "2026-05-17",
+                        theme: "cosmic",
+                        tags: ["deep", "peace"],
+                        isPublic: true,
+                        isFavorite: false
+                    },
+                    {
+                        id: 9,
+                        text: "Don't let the noise of others' opinions drown out your inner voice.",
+                        author: "Steve Jobs",
+                        date: "2026-05-16",
+                        theme: "minimal",
+                        tags: ["motivation", "warrior"],
+                        isPublic: false,
+                        isFavorite: false
+                    },
+                    {
+                        id: 10,
+                        text: "The only way to do great work is to love what you do. If you haven't found it yet, keep looking.",
+                        author: "Steve Jobs",
+                        date: "2026-05-15",
+                        theme: "neon",
+                        tags: ["motivation", "love", "discipline"],
+                        isPublic: true,
+                        isFavorite: true
+                    }
+                ];
+                saveToLocalStorage();
+            }
+        }
+
+        // ============================================
+        // PARTICLE SYSTEM
+        // ============================================
+        function createParticles() {
+            const container = document.getElementById('particleContainer');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 4 + 1;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 15 + 10;
+                const delay = Math.random() * 5;
+                const drift = (Math.random() - 0.5) * 200;
+
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}%`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.setProperty('--drift', `${drift}px`);
+
+                container.appendChild(particle);
+            }
+        }
+
+        function toggleParticles() {
+            const container = document.getElementById('particleContainer');
+            const toggle = document.getElementById('particlesToggle');
+            container.style.display = toggle.checked ? 'block' : 'none';
+        }
+
+        function toggleAnimations() {
+            const toggle = document.getElementById('animationsToggle');
+            if (!toggle.checked) {
+                document.querySelectorAll('*').forEach(el => {
+                    el.style.animation = 'none';
+                    el.style.transition = 'none';
+                });
+            } else {
+                location.reload();
+            }
+        }
+
+        // ============================================
+        // SCROLL ANIMATIONS
+        // ============================================
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        function showSection(section) {
+            document.getElementById('heroSection').classList.add('hidden');
+            document.getElementById('createSection').classList.add('hidden');
+            document.getElementById('gallerySection').classList.add('hidden');
+
+            if (section === 'hero') {
+                document.getElementById('heroSection').classList.remove('hidden');
+            } else if (section === 'create') {
+                document.getElementById('createSection').classList.remove('hidden');
+            } else if (section === 'gallery') {
+                document.getElementById('gallerySection').classList.remove('hidden');
+                renderQuotes();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleSettings() {
+            const modal = document.getElementById('settingsModal');
+            modal.classList.toggle('active');
+        }
+
+        // ============================================
+        // QUOTE CREATION
+        // ============================================
+        function updatePreview() {
+            const text = document.getElementById('quoteText').value;
+            const author = document.getElementById('quoteAuthor').value || 'You';
+            const charCount = text.length;
+
+            document.getElementById('charCount').textContent = `${charCount} characters`;
+
+            const preview = document.getElementById('livePreview');
+            if (text) {
+                preview.innerHTML = `
+                    <p class="quote-display mb-4 italic text-center">"${text}"</p>
+                    <p class="text-sm text-gray-400 text-center">— ${author}</p>
+                `;
+            } else {
+                preview.innerHTML = `
+                    <p class="quote-display mb-4 italic text-center">"Start typing to see your quote..."</p>
+                    <p class="text-sm text-gray-400 text-center">— You</p>
+                `;
+            }
+        }
+
+        function selectTheme(theme) {
+            currentTheme = theme;
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('border-purple-500', 'bg-purple-500/20');
+                btn.classList.add('border-gray-600', 'bg-gray-800/50');
+            });
+            const selectedBtn = document.querySelector(`[data-theme="${theme}"]`);
+            selectedBtn.classList.add('border-purple-500', 'bg-purple-500/20');
+            selectedBtn.classList.remove('border-gray-600', 'bg-gray-800/50');
+        }
+
+        function toggleTag(tag) {
+            const tagElement = document.querySelector(`[data-tag="${tag}"]`);
+            if (selectedTags.includes(tag)) {
+                selectedTags = selectedTags.filter(t => t !== tag);
+                tagElement.style.opacity = '0.6';
+            } else {
+                selectedTags.push(tag);
+                tagElement.style.opacity = '1';
+            }
+        }
+
+        function saveQuote() {
+            const text = document.getElementById('quoteText').value.trim();
+            const author = document.getElementById('quoteAuthor').value.trim() || 'Me';
+            const isPublic = document.getElementById('isPublic').checked;
+
+            if (!text) {
+                alert('Please write a quote first!');
+                return;
+            }
+
+            const quote = {
+                id: currentEditId || Date.now(),
+                text: text,
+                author: author,
+                date: new Date().toISOString().split('T')[0],
+                theme: currentTheme,
+                tags: [...selectedTags],
+                isPublic: isPublic,
+                isFavorite: false
+            };
+
+            if (currentEditId) {
+                quotes = quotes.map(q => q.id === currentEditId ? quote : q);
+                currentEditId = null;
+            } else {
+                quotes.push(quote);
+            }
+
+            saveToLocalStorage();
+            
+            // Show success message
+            alert('Quote saved successfully! ✨');
+            
+            // Clear form
+            document.getElementById('quoteText').value = '';
+            document.getElementById('quoteAuthor').value = '';
+            document.getElementById('isPublic').checked = false;
+            selectedTags = [];
+            document.querySelectorAll('.tag-pill').forEach(tag => tag.style.opacity = '0.6');
+            updatePreview();
+            
+            // Update quote of the day
+            updateQuoteOfTheDay();
+        }
+
+        // ============================================
+        // QUOTE GALLERY
+        // ============================================
+        function renderQuotes(filteredQuotes = null) {
+            const quotesToRender = filteredQuotes || quotes;
+            const grid = document.getElementById('quotesGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (quotesToRender.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = quotesToRender.map(quote => `
+                <div class="glass-card p-6 reveal ${getThemeClass(quote.theme)}">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex gap-2">
+                            ${quote.tags.map(tag => `
+                                <span class="text-xs px-2 py-1 rounded-full bg-purple-500/20 text-purple-300">${tag}</span>
+                            `).join('')}
+                        </div>
+                        <button onclick="toggleFavorite(${quote.id})" class="text-xl ${quote.isFavorite ? 'text-yellow-400' : 'text-gray-600'} hover:text-yellow-400 transition">
+                            ${quote.isFavorite ? '⭐' : '☆'}
+                        </button>
+                    </div>
+                    <p class="quote-display mb-4 italic">"${quote.text}"</p>
+                    <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                        <span>— ${quote.author}</span>
+                        <span>${quote.date}</span>
+                    </div>
+                    ${quote.isPublic ? '<div class="text-xs text-green-400 mb-4">🌍 Public</div>' : ''}
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="editQuote(${quote.id})" class="px-3 py-1 text-xs bg-blue-500/20 text-blue-300 rounded hover:bg-blue-500/30 transition">Edit</button>
+                        <button onclick="copyQuoteText(${quote.id})" class="px-3 py-1 text-xs bg-purple-500/20 text-purple-300 rounded hover:bg-purple-500/30 transition">Copy</button>
+                        <button onclick="generateWallpaperForQuote(${quote.id})" class="px-3 py-1 text-xs bg-pink-500/20 text-pink-300 rounded hover:bg-pink-500/30 transition">Wallpaper</button>
+                        <button onclick="deleteQuote(${quote.id})" class="px-3 py-1 text-xs bg-red-500/20 text-red-300 rounded hover:bg-red-500/30 transition">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+
+            initScrollAnimations();
+        }
+
+        function getThemeClass(theme) {
+            const themeClasses = {
+                'neon': 'theme-neon',
+                'gold': 'theme-gold',
+                'minimal': 'theme-minimal',
+                'cosmic': 'theme-neon'
+            };
+            return themeClasses[theme] || '';
+        }
+
+        function filterQuotes() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const moodFilter = document.getElementById('filterMood').value;
+            const themeFilter = document.getElementById('filterTheme').value;
+
+            let filtered = quotes;
+
+            if (searchTerm) {
+                filtered = filtered.filter(q => 
+                    q.text.toLowerCase().includes(searchTerm) || 
+                    q.author.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            if (moodFilter) {
+                filtered = filtered.filter(q => q.tags.includes(moodFilter));
+            }
+
+            if (themeFilter) {
+                filtered = filtered.filter(q => q.theme === themeFilter);
+            }
+
+            renderQuotes(filtered);
+        }
+
+        function filterFavorites() {
+            const favorites = quotes.filter(q => q.isFavorite);
+            renderQuotes(favorites);
+        }
+
+        function toggleFavorite(id) {
+            quotes = quotes.map(q => 
+                q.id === id ? { ...q, isFavorite: !q.isFavorite } : q
+            );
+            saveToLocalStorage();
+            renderQuotes();
+        }
+
+        function editQuote(id) {
+            const quote = quotes.find(q => q.id === id);
+            if (!quote) return;
+
+            currentEditId = id;
+            document.getElementById('quoteText').value = quote.text;
+            document.getElementById('quoteAuthor').value = quote.author;
+            document.getElementById('isPublic').checked = quote.isPublic;
+            
+            selectedTags = [...quote.tags];
+            document.querySelectorAll('.tag-pill').forEach(tag => {
+                const tagName = tag.getAttribute('data-tag');
+                tag.style.opacity = selectedTags.includes(tagName) ? '1' : '0.6';
+            });
+
+            selectTheme(quote.theme);
+            updatePreview();
+            showSection('create');
+        }
+
+        function deleteQuote(id) {
+            if (confirm('Are you sure you want to delete this quote?')) {
+                quotes = quotes.filter(q => q.id !== id);
+                saveToLocalStorage();
+                renderQuotes();
+                updateQuoteOfTheDay();
+            }
+        }
+
+        function copyQuoteText(id) {
+            const quote = quotes.find(q => q.id === id);
+            if (!quote) return;
+
+            const text = `"${quote.text}" — ${quote.author}`;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Quote copied to clipboard! ✨');
+            });
+        }
+
+        // ============================================
+        // WALLPAPER GENERATOR
+        // ============================================
+        function createWallpaper() {
+            const text = document.getElementById('quoteText').value.trim();
+            if (!text) {
+                alert('Please write a quote first!');
+                return;
+            }
+
+            const quote = {
+                text: text,
+                author: document.getElementById('quoteAuthor').value.trim() || 'Me',
+                theme: currentTheme
+            };
+
+            openWallpaperModal(quote);
+        }
+
+        function generateWallpaperForQuote(id) {
+            const quote = quotes.find(q => q.id === id);
+            if (!quote) return;
+            openWallpaperModal(quote);
+        }
+
+        function openWallpaperModal(quote) {
+            const modal = document.getElementById('wallpaperModal');
+            modal.classList.add('active');
+            renderWallpaper(quote, currentFormat);
+        }
+
+        function closeWallpaperModal() {
+            const modal = document.getElementById('wallpaperModal');
+            modal.classList.remove('active');
+        }
+
+        function selectFormat(format) {
+            currentFormat = format;
+            document.querySelectorAll('.format-btn').forEach(btn => {
+                btn.classList.remove('border-purple-500', 'bg-purple-500/20');
+                btn.classList.add('border-gray-600', 'bg-gray-800/50');
+            });
+            const selectedBtn = document.querySelector(`[data-format="${format}"]`);
+            selectedBtn.classList.add('border-purple-500', 'bg-purple-500/20');
+            selectedBtn.classList.remove('border-gray-600', 'bg-gray-800/50');
+
+            // Re-render wallpaper with new format
+            const text = document.getElementById('quoteText').value.trim();
+            if (text) {
+                const quote = {
+                    text: text,
+                    author: document.getElementById('quoteAuthor').value.trim() || 'Me',
+                    theme: currentTheme
+                };
+                renderWallpaper(quote, format);
+            }
+        }
+
+        function renderWallpaper(quote, format) {
+            const preview = document.getElementById('wallpaperPreview');
+            
+            const dimensions = {
+                'instagram': { width: 1080, height: 1920 },
+                'mobile': { width: 1080, height: 2340 },
+                'desktop': { width: 1920, height: 1080 },
+                'square': { width: 1080, height: 1080 }
+            };
+
+            const dim = dimensions[format];
+            const aspectRatio = dim.height / dim.width;
+
+            const themeColors = {
+                'neon': {
+                    bg: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%)',
+                    accent: '#b794f6',
+                    text: '#ffffff'
+                },
+                'gold': {
+                    bg: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)',
+                    accent: '#fbbf24',
+                    text: '#fbbf24'
+                },
+                'minimal': {
+                    bg: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+                    accent: '#ffffff',
+                    text: '#ffffff'
+                },
+                'cosmic': {
+                    bg: 'linear-gradient(135deg, #0a0e1a 0%, #1a1f3a 50%, #0a0e1a 100%)',
+                    accent: '#60a5fa',
+                    text: '#ffffff'
+                }
+            };
+
+            const theme = themeColors[quote.theme] || themeColors['neon'];
+
+            preview.innerHTML = `
+                <div id="wallpaperContent" style="
+                    width: 100%;
+                    max-width: 600px;
+                    aspect-ratio: ${dim.width}/${dim.height};
+                    background: ${theme.bg};
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 60px;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <!-- Decorative Elements -->
+                    <div style="
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: radial-gradient(circle at 30% 30%, ${theme.accent}20 0%, transparent 50%),
+                                    radial-gradient(circle at 70% 70%, ${theme.accent}15 0%, transparent 50%);
+                        opacity: 0.5;
+                    "></div>
+
+                    <!-- Quote Content -->
+                    <div style="position: relative; z-index: 10; text-align: center; max-width: 90%;">
+                        <p style="
+                            font-family: 'Cinzel', serif;
+                            font-size: ${format === 'desktop' ? '2.5rem' : '2rem'};
+                            line-height: 1.6;
+                            color: ${theme.text};
+                            margin-bottom: 2rem;
+                            font-style: italic;
+                            text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+                        ">"${quote.text}"</p>
+                        <p style="
+                            font-family: 'Orbitron', sans-serif;
+                            font-size: 1.2rem;
+                            color: ${theme.accent};
+                            text-transform: uppercase;
+                            letter-spacing: 0.2em;
+                            text-shadow: 0 0 20px ${theme.accent};
+                        ">— ${quote.author}</p>
+                    </div>
+
+                    <!-- Bottom Accent -->
+                    <div style="
+                        position: absolute;
+                        bottom: 40px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 100px;
+                        height: 2px;
+                        background: linear-gradient(90deg, transparent, ${theme.accent}, transparent);
+                        box-shadow: 0 0 10px ${theme.accent};
+                    "></div>
+                </div>
+            `;
+        }
+
+        function downloadWallpaper(format) {
+            const element = document.getElementById('wallpaperContent');
+            if (!element) {
+                alert('Please generate a wallpaper first!');
+                return;
+            }
+
+            html2canvas(element, {
+                scale: 2,
+                backgroundColor: null,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `quote-wallpaper-${Date.now()}.${format}`;
+                link.href = canvas.toDataURL(format === 'jpg' ? 'image/jpeg' : 'image/png', 1.0);
+                link.click();
+            });
+        }
+
+        function shareWallpaper() {
+            const element = document.getElementById('wallpaperContent');
+            if (!element) {
+                alert('Please generate a wallpaper first!');
+                return;
+            }
+
+            html2canvas(element, {
+                scale: 2,
+                backgroundColor: null,
+                logging: false
+            }).then(canvas => {
+                canvas.toBlob(blob => {
+                    if (navigator.share) {
+                        navigator.share({
+                            title: 'My Quote',
+                            files: [new File([blob], 'quote.png', { type: 'image/png' })]
+                        }).catch(() => {
+                            alert('Sharing not supported. Use Download instead.');
+                        });
+                    } else {
+                        alert('Sharing not supported on this browser. Use Download instead.');
+                    }
+                });
+            });
+        }
+
+        // ============================================
+        // DATA MANAGEMENT
+        // ============================================
+        function saveToLocalStorage() {
+            localStorage.setItem('quotes', JSON.stringify(quotes));
+        }
+
+        function loadQuotes() {
+            const saved = localStorage.getItem('quotes');
+            if (saved) {
+                quotes = JSON.parse(saved);
+            }
+        }
+
+        function exportQuotes() {
+            const dataStr = JSON.stringify({ quotes: quotes }, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `quotes-export-${Date.now()}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importQuotes() {
+            document.getElementById('fileInput').click();
+        }
+
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.quotes && Array.isArray(data.quotes)) {
+                        if (confirm(`Import ${data.quotes.length} quotes? This will merge with existing quotes.`)) {
+                            quotes = [...quotes, ...data.quotes];
+                            saveToLocalStorage();
+                            renderQuotes();
+                            alert('Quotes imported successfully! ✨');
+                        }
+                    } else {
+                        alert('Invalid JSON format. Please ensure the file contains a "quotes" array.');
+                    }
+                } catch (error) {
+                    alert('Error reading file. Please ensure it\'s a valid JSON file.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure? This will delete ALL your quotes permanently!')) {
+                quotes = [];
+                saveToLocalStorage();
+                renderQuotes();
+                updateQuoteOfTheDay();
+                alert('All quotes cleared.');
+            }
+        }
+
+        function copyShareLink() {
+            const link = document.getElementById('shareLink');
+            link.select();
+            document.execCommand('copy');
+            alert('Link copied! (Feature coming soon)');
+        }
+
+        // ============================================
+        // QUOTE OF THE DAY
+        // ============================================
+        function updateQuoteOfTheDay() {
+            if (quotes.length === 0) return;
+
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('qotd-text').textContent = `"${randomQuote.text}"`;
+            document.getElementById('qotd-author').textContent = `— ${randomQuote.author}`;
+        }
+
+        // ============================================
+        // VOICE INPUT
+        // ============================================
+        function startVoiceInput() {
+            if (!('webkitSpeechRecognition' in window)) {
+                alert('Voice input not supported in this browser. Try Chrome or Edge.');
+                return;
+            }
+
+            const recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = function() {
+                alert('🎤 Listening... Speak your quote now.');
+            };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('quoteText').value = transcript;
+                updatePreview();
+            };
+
+            recognition.onerror = function(event) {
+                alert('Error occurred in recognition: ' + event.error);
+            };
+
+            recognition.start();
+        }
+    </script>
+</body>
+</html>
